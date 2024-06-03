@@ -2,8 +2,8 @@ package server.cls.commands;
 
 import common.AbstractCommand;
 import common.Feedbacker;
-import common.UserData;
-import server.CollectionManager;
+import common.User;
+import server.managers.CollectionManager;
 import server.CommandLine;
 
 public class Login extends AbstractCommand {
@@ -11,7 +11,7 @@ public class Login extends AbstractCommand {
     private CollectionManager cm;
     private RuntimeEnv re;
     public Login(CommandLine cl, CollectionManager cm, RuntimeEnv re) {
-        super("login", "authorize");
+        super("login {user} {password}", "authorize");
         this.cl = cl;
         this.cm=cm;
         this.re=re;
@@ -21,17 +21,17 @@ public class Login extends AbstractCommand {
      * Executes the "add" command
      *
      * @param arg
-     * @param userData
+     * @param user
      * @return Feedbacker
      */
     @Override
-    public Feedbacker execute(String arg, UserData userData) {
-        if(arg.isEmpty()) return new Feedbacker(false,">Wrong argument usage. see 'help' for reference.");
+    public Feedbacker execute(String arg, User user) {
+        if(arg.isEmpty()) return new Feedbacker(false,">Wrong argument usage. see 'help' for reference.", user);
         re.logger.info("check started");
         Feedbacker temp = null;
         int count = 0;
         while(temp==null){
-            temp = re.askAuth(arg);
+            temp = re.askAuth(arg, user);
             re.logger.info("chekage happening");
             count+=1;
         }
